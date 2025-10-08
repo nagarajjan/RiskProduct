@@ -1,0 +1,157 @@
+:root {
+    --bg-color: #1a1a2e;
+    --card-bg-color: #2c2c54;
+    --text-color: #e0e0e0;
+    --accent-color: #00bcd4; /* Teal */
+    --accent-color-hover: #00d3eb;
+    --risk-high-color: #ff6b6b;
+    --risk-medium-color: #feca57;
+    --risk-low-color: #1dd1a1;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2 {
+    text-align: center;
+    color: var(--accent-color);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+}
+
+.form-container, .product-container {
+    background-color: var(--card-bg-color);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+    .form-container:hover, .product-card:hover {
+        transform: translateY(-5px);
+    }
+
+form div {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-color);
+}
+
+select, input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid var(--accent-color);
+    background-color: #3f3f6c;
+    color: var(--text-color);
+    appearance: none;
+    cursor: pointer;
+}
+
+button {
+    background-color: var(--accent-color);
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+    button:hover {
+        background-color: var(--accent-color-hover);
+    }
+
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.product-card {
+    background-color: var(--card-bg-color);
+    border-radius: 12px;
+    padding: 20px;
+    width: 280px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-left: 5px solid var(--accent-color);
+}
+
+    .product-card h3 {
+        margin-top: 0;
+        font-size: 1.5rem;
+        color: var(--text-color);
+    }
+
+    .product-card strong {
+        color: var(--accent-color);
+    }
+
+.risk-tag {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+
+.risk-High {
+    background-color: var(--risk-high-color);
+}
+
+.risk-Medium {
+    background-color: var(--risk-medium-color);
+}
+
+.risk-Low {
+    background-color: var(--risk-low-color);
+}
+
+.detail-card {
+    background-color: var(--card-bg-color);
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+    .detail-card h2 {
+        color: var(--accent-color);
+        border-bottom: 2px solid var(--accent-color);
+        padding-bottom: 10px;
+    }
+
+pre {
+    white-space: pre-wrap;
+    background-color: #3f3f6c;
+    padding: 15px;
+    border-radius: 8px;
+    color: var(--text-color);
+    font-size: 0.9em;
+}

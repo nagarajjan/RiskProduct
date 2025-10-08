@@ -1,0 +1,42 @@
+[
+  {
+    "product_id": "P001",
+    "name": "Global Equity Fund",
+    "type": "Equity",
+    "risk_level": "High",
+    "target_return_range": "8-12%",
+    "management_fee": 1.5,
+    "regulatory_status": "Approved for US and EU markets",
+    "description": "Invests in a diversified portfolio of international stocks to achieve high capital growth."
+  },
+  {
+    "product_id": "P002",
+    "name": "Balanced Income Fund",
+    "type": "Mixed Asset",
+    "risk_level": "Medium",
+    "target_return_range": "4-6%",
+    "management_fee": 1.0,
+    "regulatory_status": "Approved for all markets",
+    "description": "Combines a mix of bonds and equities to provide a stable income stream with moderate growth potential."
+  },
+  {
+    "product_id": "P003",
+    "name": "Money Market Account",
+    "type": "Cash",
+    "risk_level": "Low",
+    "target_return_range": "1-2%",
+    "management_fee": 0.2,
+    "regulatory_status": "Approved for US markets only",
+    "description": "A highly liquid account designed for capital preservation, ideal for short-term goals."
+  },
+  {
+    "product_id": "P004",
+    "name": "Emerging Markets Bond",
+    "type": "Fixed Income",
+    "risk_level": "High",
+    "target_return_range": "5-7%",
+    "management_fee": 0.8,
+    "regulatory_status": "Approved for EU markets only",
+    "description": "A high-yield bond fund focusing on emerging markets, with high-risk exposure."
+  }
+]

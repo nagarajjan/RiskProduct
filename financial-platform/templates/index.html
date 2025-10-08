@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Product Recommender</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>AI-Powered Financial Product Platform</h1>
+
+        <div class="form-container">
+            <h2>Your Financial Profile</h2>
+            <form id="profile-form">
+                <div>
+                    <label for="customer_id">Select Customer:</label>
+                    <select id="customer_id" name="customer_id"></select>
+                </div>
+                <div>
+                    <input type="checkbox" id="cross_border" name="cross_border">
+                    <label for="cross_border">Allow cross-border products</label>
+                </div>
+                <button type="submit">Show Me Products</button>
+            </form>
+        </div>
+
+        <div class="product-container">
+            <h2>Filtered Products</h2>
+            <div id="product-list" class="product-list">
+                <p>Select your profile to see products.</p>
+            </div>
+        </div>
+
+        <div id="product-details" class="detail-card" style="display: none;">
+            <h2>Product Details & Custom Value Proposition</h2>
+            <pre id="details-content"></pre>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

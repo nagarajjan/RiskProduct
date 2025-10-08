@@ -1,0 +1,6 @@
+customer_id,risk_appetite,investment_horizon,annual_income_usd,existing_portfolio_value,email,country
+C001,Moderately Risk Averse,Long-term,125000,550000,c001@example.com,US
+C002,Risk Tolerant,Medium-term,95000,120000,c002@example.com,UK
+C003,Risk Adverse,Short-term,60000,35000,c003@example.com,US
+C004,Risk Tolerant,Long-term,250000,1200000,c004@example.com,US
+C005,Moderately Risk Averse,Medium-term,70000,80000,c005@example.com,UK
