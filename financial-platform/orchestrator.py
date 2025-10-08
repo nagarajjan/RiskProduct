@@ -22,6 +22,7 @@ class FinancialOrchestrator:
 
         self.all_products_data = self._load_product_data_from_file("product_details.json")
         self.all_customers_data = self._load_customer_data_from_file("customer_profiles.csv")
+        self.config = self._load_config_from_file("config.json")
 
     def _load_product_data_from_file(self, file_path):
         """Loads product data directly from the JSON file."""
@@ -40,6 +41,15 @@ class FinancialOrchestrator:
         except FileNotFoundError as e:
             print(f"Error: {e}. Check customer profiles file.")
             return []
+    
+    def _load_config_from_file(self, file_path):
+        """Loads configuration from a JSON file."""
+        try:
+            with open(file_path, 'r') as f:
+                return json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            print(f"Warning: Failed to load config from '{file_path}'. Using default settings.")
+            return {"dynamic_risk_enabled": False}
 
     def get_customer_profile(self, customer_id: str) -> Dict[str, Any] or None:
         """Retrieves a customer's profile by ID."""
@@ -100,15 +110,36 @@ class FinancialOrchestrator:
         # Use RAG to confirm product-specific and regulatory context
         product_context = self.rag_kb.retrieve_context(f"Details for product {product['product_id']}.")
         regulatory_info = self.rag_kb.retrieve_context(f"Regulatory expectations for {customer_profile['country']}.")
+        
+        # Check the configuration file to see if dynamic risk is enabled
+        risk_assessment_info = ""
+        # Create a copy of the product object to safely modify the risk level
+        current_product = product.copy()
 
-        mcp_output = "No real-time MCP data requested for this flow."
-        if product['product_id'] == "P001":
-            try:
-                # Placeholder for async call. In a real app, this would use asyncio.
-                mcp_output = f"MCP call is a placeholder in this synchronous example. Using pre-defined data."
-            except Exception as e:
-                mcp_output = f"MCP call failed: {str(e)}"
-                print(mcp_output)
+        if self.config.get("dynamic_risk_enabled", False):
+            # Dynamically construct the query for the latest risk article
+            latest_article_query = f"latest risk update article for product {product['product_id']}"
+            latest_article_context = self.rag_kb.retrieve_context(latest_article_query)
+
+            if latest_article_context and "Knowledge base not yet populated" not in latest_article_context:
+                try:
+                    mcp_response = self.mcp_client.call(
+                        Tool(name="assess_product_risk_from_evidence", description="Assess product risk."),
+                        product_id=current_product['product_id'],
+                        article_content=latest_article_context,
+                        current_risk_level=current_product['risk_level']
+                    )
+                    if mcp_response and mcp_response.content:
+                        new_risk = mcp_response.content.strip()
+                        if new_risk != 'No Change' and new_risk != current_product['risk_level']:
+                            current_product['risk_level'] = new_risk # Override the risk level
+                            risk_assessment_info = f"**Dynamic Risk Assessment:** The risk level has been updated to **{new_risk}** based on the latest market analysis.\n"
+                        else:
+                            risk_assessment_info = f"**Dynamic Risk Assessment:** No change to the product's risk level based on the latest market analysis.\n"
+                except Exception as e:
+                    risk_assessment_info = f"**Dynamic Risk Assessment:** Failed to perform risk assessment via MCP. Error: {str(e)}.\n"
+        
+        mcp_output = f"{risk_assessment_info}\nAsync client call is simplified for this example."
         
         prompt = f"""
         Generate a detailed value proposition, including customized pricing, for the customer based on their profile and the selected product.
@@ -118,7 +149,14 @@ class FinancialOrchestrator:
         - Country: {customer_profile['country']}
         
         **Selected Product Details (from RAG):**
-        {product_context}
+        Product ID: {current_product['product_id']}
+        Name: {current_product['name']}
+        Type: {current_product['type']}
+        Risk Level: {current_product['risk_level']}
+        Target Return: {current_product['target_return_range']}
+        Management Fee: {current_product['management_fee']}
+        Regulatory Status: {current_product['regulatory_status']}
+        Description: {current_product['description']}
         
         **Real-time Context (from MCP):**
         {mcp_output}
@@ -133,7 +171,9 @@ class FinancialOrchestrator:
             model="gpt-4o",
             messages=[{"role": "user", "content": prompt}]
         )
-        return response.choices.message.content
+        if response.choices and response.choices.message:
+            return response.choices.message.content
+        return "Failed to get a detailed recommendation."
 
 # Main application setup within Flask
 class AppContainer:
@@ -143,7 +183,8 @@ class AppContainer:
             "customer_profiles.csv", 
             "product_details.json", 
             "Regulatory_Handbook_US.pdf", 
-            "Product_Risk_Assessment_P001.pdf"
+            "Product_Risk_Assessment_P001.pdf",
+            "Product_Risk_Update_P001.pdf"
         ])
 
 container = AppContainer()
